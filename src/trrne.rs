@@ -1,5 +1,6 @@
-﻿use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign};
-use std::{f32, i32};
+﻿use crate::traits::f32e;
+use std::f32;
+use std::ops::*; //{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign};
 
 #[derive(Debug, Clone, Copy)]
 pub struct V2 {
@@ -141,27 +142,29 @@ impl V2 {
     }
 
     pub fn distance(a: &mut V2, b: &mut V2) -> f32 {
-        // (a-b).magnitude()
-        a.magnitude() - b.magnitude()
+        (*a - *b).magnitude()
     }
 
     pub fn dot(a: &mut V2, b: &mut V2) -> f32 {
         a.x * b.x + a.y * b.y
     }
 
-    // pub fn cross(a: V2, b: V2) -> f32 {
-    //     a.x * b.y - b.y * a.x
-    // }
+    pub fn cross(a: V2, b: V2) -> f32 {
+        a.x * b.y - b.y * a.x
+    }
 
     pub fn angle(a: &mut V2, b: &mut V2) -> f32 {
-        let da = a.magnitude();
-        if da.abs() < f32::EPSILON {
+        let (lal, lbl) = (a.magnitude(), b.magnitude());
+        if (lal + lbl).abs() < f32::EPSILON * 2. {
             return 0.;
         }
-        let db = b.magnitude();
-        if db.abs() < f32::EPSILON {
-            return 0.;
-        }
-        f32::to_degrees((V2::dot(a, b) / da / db).acos())
+        // f32::to_degrees((V2::dot(a, b) / lal / lbl).acos())
+        f32::acosf(V2::dot(a, b)) * f32::to_deg()
     }
 }
+
+// pub mod trrne {
+//     pub fn print() -> String {
+//         return String::from("test");
+//     }
+// }

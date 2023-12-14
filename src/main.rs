@@ -1,6 +1,11 @@
+pub mod dict;
+pub mod traits;
 pub mod trrne;
 
 extern crate rand;
+// use crate::trrne::trrne::print;
+
+// use std::collections::HashMap;
 
 use rand::Rng;
 use trrne::V2;
@@ -42,25 +47,30 @@ fn bst(weights: &[f32]) -> i32 {
 }
 
 fn main() {
-    // let weights: &[f32] = &[100.0, 50.0, 1.0];
-    // let a: &[&str] = &["R", "SR", "SSR"];
-    // const A: Vec<&str> = Vec::new();
-    // let rarity = &mut [A; 3];
-    // for _ in 0..1024 {
-    //     let choice: &str = a[bst(weights) as usize];
-    //     for i in 0..rarity.len() {
-    //         if choice == a[i] {
-    //             rarity[i].push(choice);
-    //         }
-    //     }
-    // }
-    // for i in 0..rarity.len() {
-    //     println!("{}: {}", a[i], rarity[i].len());
-    // }
+    // let mut dict: HashMap<&str, f32> = HashMap::new();
+    // dict.insert("R", 100.);
+    // dict.insert("SR", 50.);
+    // dict.insert("SSR", 1.);
+    let weights: &[f32] = &[100.0, 50.0, 1.0];
+    let a: &[&str] = &["R", "SR", "SSR"];
+    const A: Vec<&str> = Vec::new();
+    // let test = vec![0; 1];
+    let rarity: &mut [Vec<&str>] = &mut [A; 3];
+    for _ in 0..1024 {
+        let choice: &str = a[bst(weights) as usize];
+        for i in 0..rarity.len() {
+            if choice == a[i] {
+                rarity[i].push(choice);
+            }
+        }
+    }
+    for i in 0..rarity.len() {
+        println!("{}: {}", a[i], rarity[i].len());
+    }
 
     let a = &mut V2::new(0., 23.2);
-    let b = &mut V2::new(1.3, 23.4);
-    let aa = *a;
-    let bb = *b;
-    println!("{}", (aa - bb).to_str());
+    let b = &mut V2::new(0., a.y * a.x);
+    println!("{}", V2::distance(a, b));
+
+    // println!("{:?}", trrne::trrne::print());
 }
