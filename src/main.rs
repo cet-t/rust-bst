@@ -48,16 +48,11 @@ fn bst(weights: &[f32]) -> i32 {
 }
 
 fn header(title: &str) {
-    let line = String::from("----------");
-    let mut dst = String::new();
-    dst.push_str(&line);
-    dst.push_str(&title);
-    dst.push_str(&line);
-    println!("{}", dst);
+    println!("---------- {} ----------", title);
 }
 
 fn footer() {
-    println!("{}", String::from("--------------------------"));
+    println!("--------------------------");
 }
 
 fn main() {
@@ -83,7 +78,7 @@ fn main() {
 
     {
         header(&"V2");
-        let (a, b, c): (&mut V2, &mut V2, f32) = (&mut V2::new(1., 4.), &mut V2::new(-2., 8.), 2.);
+        let (a, b, c) = (&mut V2::new(1., 4.), &mut V2::new(-2., 8.), 2.);
         println!("a: {}", a.to_str());
         println!("b: {}", b.to_str());
         println!("c: {}", c);
