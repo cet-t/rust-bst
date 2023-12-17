@@ -8,7 +8,8 @@ extern crate rand;
 // use std::collections::HashMap;
 
 use rand::Rng;
-use trrne::V2;
+use std::string::String;
+use trrne::{Vec2, V2};
 
 fn bst(weights: &[f32]) -> i32 {
     let length: i32 = weights.len() as i32;
@@ -46,31 +47,79 @@ fn bst(weights: &[f32]) -> i32 {
     return top;
 }
 
+fn header(title: &str) {
+    let line = String::from("----------");
+    let mut dst = String::new();
+    dst.push_str(&line);
+    dst.push_str(&title);
+    dst.push_str(&line);
+    println!("{}", dst);
+}
+
+fn footer() {
+    println!("{}", String::from("--------------------------"));
+}
+
 fn main() {
-    // let mut dict: HashMap<&str, f32> = HashMap::new();
-    // dict.insert("R", 100.);
-    // dict.insert("SR", 50.);
-    // dict.insert("SSR", 1.);
-    let weights: &[f32] = &[100.0, 50.0, 1.0];
-    let a: &[&str] = &["R", "SR", "SSR"];
-    const A: Vec<&str> = Vec::new();
-    // let test = vec![0; 1];
-    let rarity: &mut [Vec<&str>] = &mut [A; 3];
-    for _ in 0..1024 {
-        let choice: &str = a[bst(weights) as usize];
-        for i in 0..rarity.len() {
-            if choice == a[i] {
-                rarity[i].push(choice);
+    {
+        header(&"lottery");
+        let weights: &[f32] = &[100.0, 50.0, 1.0];
+        let a: &[&str] = &["R", "SR", "SSR"];
+        const A: Vec<&str> = Vec::new();
+        let rarity: &mut [Vec<&str>] = &mut [A; 3];
+        for _ in 0..1024 {
+            let choice: &str = a[bst(weights) as usize];
+            for i in 0..rarity.len() {
+                if choice == a[i] {
+                    rarity[i].push(choice);
+                }
             }
         }
-    }
-    for i in 0..rarity.len() {
-        println!("{}: {}", a[i], rarity[i].len());
+        for i in 0..rarity.len() {
+            println!("{}: {}", a[i], rarity[i].len());
+        }
+        footer();
     }
 
-    let a = &mut V2::new(0., 23.2);
-    let b = &mut V2::new(0., a.y * a.x);
-    println!("{}", V2::distance(a, b));
+    {
+        header(&"V2");
+        let (a, b, c): (&mut V2, &mut V2, f32) = (&mut V2::new(1., 4.), &mut V2::new(-2., 8.), 2.);
+        println!("a: {}", a.to_str());
+        println!("b: {}", b.to_str());
+        println!("c: {}", c);
+        println!("a+b: {}", (*a + *b).to_str());
+        println!("a+c: {}", (*a + c).to_str());
+        println!("a-b: {}", (*a - *b).to_str());
+        println!("a-c: {}", (*a - c).to_str());
+        println!("a*b: {}", (*a * *b).to_str());
+        println!("a*c: {}", (*a * c).to_str());
+        println!("a/b: {}", (*a / *b).to_str());
+        println!("a/c: {}", (*a / c).to_str());
+        *a += *b;
+        println!("a+=b: {}", a.to_str());
+        *a += c;
+        println!("a+=c: {}", a.to_str());
+        *a -= *b;
+        println!("a-=b: {}", a.to_str());
+        *a -= c;
+        println!("a-=c: {}", a.to_str());
+        *a *= *b;
+        println!("a*=b: {}", a.to_str());
+        *a *= c;
+        println!("a*=c: {}", a.to_str());
+        *a /= *b;
+        println!("a/=b: {}", a.to_str());
+        *a /= c;
+        println!("a/=c: {}", a.to_str());
+        println!("magnitude a: {}", a.magnitude());
+        println!("normalize a: {}", a.normalize().to_str());
+        println!("distance ab: {}", V2::distance(a, b));
+        println!("dot ab: {}", V2::dot(a, b));
+        println!("cross ab: {}", V2::cross(a, b));
+        println!("a: {},b: {}", a.to_str(), b.to_str());
+        println!("angle ab: {}", V2::angle(a, b));
+        footer();
+    }
 
     // println!("{:?}", trrne::trrne::print());
 }

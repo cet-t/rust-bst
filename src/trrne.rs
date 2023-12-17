@@ -1,6 +1,19 @@
 ﻿use crate::traits::f32e;
 use std::f32;
-use std::ops::*; //{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign};
+use std::ops::*;
+
+#[allow(non_camel_case_types)]
+pub trait Vec2 {
+    fn new(x: f32, y: f32) -> V2;
+    fn set(&mut self, x: f32, y: f32);
+    fn to_str(&self) -> String;
+    fn magnitude(&self) -> f32;
+    fn normalize(&self) -> V2;
+    fn distance(a: &mut V2, b: &mut V2) -> f32;
+    fn dot(a: &mut V2, b: &mut V2) -> f32;
+    fn cross(a: &mut V2, b: &mut V2) -> f32;
+    fn angle(a: &mut V2, b: &mut V2) -> f32;
+}
 
 #[derive(Debug, Clone, Copy)]
 pub struct V2 {
@@ -123,43 +136,47 @@ impl DivAssign<f32> for V2 {
     }
 }
 
-impl V2 {
-    pub fn new(x: f32, y: f32) -> V2 {
+impl Vec2 for V2 {
+    fn new(x: f32, y: f32) -> V2 {
         V2 { x, y }
     }
 
-    pub fn to_str(&self) -> String {
+    fn to_str(&self) -> String {
         return format!("({},{})", self.x, self.y);
     }
 
-    pub fn set(&mut self, x: f32, y: f32) {
+    fn set(&mut self, x: f32, y: f32) {
         self.x = x;
         self.y = y;
     }
 
-    pub fn magnitude(&self) -> f32 {
+    fn magnitude(&self) -> f32 {
         (self.x * self.x + self.y * self.y).sqrt()
     }
 
-    pub fn distance(a: &mut V2, b: &mut V2) -> f32 {
+    fn normalize(&self) -> V2 {
+        let m = self.magnitude();
+        V2::new(self.x / m, self.y / m)
+    }
+
+    fn distance(a: &mut V2, b: &mut V2) -> f32 {
         (*a - *b).magnitude()
     }
 
-    pub fn dot(a: &mut V2, b: &mut V2) -> f32 {
+    fn dot(a: &mut V2, b: &mut V2) -> f32 {
         a.x * b.x + a.y * b.y
     }
 
-    pub fn cross(a: V2, b: V2) -> f32 {
+    fn cross(a: &mut V2, b: &mut V2) -> f32 {
         a.x * b.y - b.y * a.x
     }
 
-    pub fn angle(a: &mut V2, b: &mut V2) -> f32 {
+    fn angle(a: &mut V2, b: &mut V2) -> f32 {
         let (lal, lbl) = (a.magnitude(), b.magnitude());
-        if (lal + lbl).abs() < f32::EPSILON * 2. {
+        if f32::absf(lal + lbl) < f32::EPSILON {
             return 0.;
         }
-        // f32::to_degrees((V2::dot(a, b) / lal / lbl).acos())
-        f32::acosf(V2::dot(a, b)) * f32::to_deg()
+        f32::acosf(V2::dot(a, b)) * f32::rad_to_deg()
     }
 }
 
